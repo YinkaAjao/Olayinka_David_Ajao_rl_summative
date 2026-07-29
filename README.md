@@ -14,7 +14,8 @@ This project uses `uv` for seamless, deterministic dependency management. **No m
 
 1. **Clone the repository:**
    ```bash
-   git clone [<your-github-repo-link>](https://github.com/YinkaAjao/Olayinka_David_Ajao_rl_summative.git)
+   git clone https://github.com/YinkaAjao/Olayinka_David_Ajao_rl_summative.git
+   
    cd olayinka_david_ajao_rl_summative
 
    ```
