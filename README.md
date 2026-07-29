@@ -14,12 +14,13 @@ This project uses `uv` for seamless, deterministic dependency management. **No m
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-github-repo-link>
+   git clone [<your-github-repo-link>](https://github.com/YinkaAjao/Olayinka_David_Ajao_rl_summative.git)
    cd olayinka_david_ajao_rl_summative
 
-```
+   ```
 
 2. **Sync the environment:**
+
 This command reads the `pyproject.toml`, instantly builds the isolated environment, and installs all necessary packages.
 ```bash
 uv sync
