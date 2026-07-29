@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import gymnasium as gym
 import torch
 from stable_baselines3 import DQN, PPO, A2C
+from stable_baselines3.common.logger import configure
 import environment  # Register environment
 
 def generate_all_artifacts():
@@ -123,6 +124,58 @@ def generate_all_artifacts():
     plt.savefig("assets/generalization_test.png")
     plt.close()
     print("Saved: assets/generalization_test.png")
+
+    # ---------------------------------------------------------
+    # Plot 4: Track & Plot DQN Objective (Loss)
+    # ---------------------------------------------------------
+    print("Extracting actual Loss logs for DQN objective curve...")
+    dqn_log_dir = "./logs/dqn_logger"
+    os.makedirs(dqn_log_dir, exist_ok=True)
+    dqn_logger = configure(dqn_log_dir, ["csv"])
+    
+    # Using best DQN hyperparameters
+    dqn_model = DQN("MlpPolicy", env, learning_rate=1e-4, gamma=0.90, verbose=0)
+    dqn_model.set_logger(dqn_logger)
+    dqn_model.learn(total_timesteps=10000)
+    
+    dqn_csv = pd.read_csv(f"{dqn_log_dir}/progress.csv")
+    plt.figure(figsize=(8, 5))
+    if 'train/loss' in dqn_csv.columns:
+        valid_data = dqn_csv[['time/total_timesteps', 'train/loss']].dropna()
+        plt.plot(valid_data['time/total_timesteps'], valid_data['train/loss'], color='blue', linewidth=2)
+        plt.title('DQN Objective Curve (Training Loss)')
+        plt.xlabel('Timesteps')
+        plt.ylabel('Huber Loss')
+        plt.grid(True)
+        plt.savefig('assets/dqn_objective_curve.png')
+        plt.close()
+        print("Saved: assets/dqn_objective_curve.png")
+        
+    # ---------------------------------------------------------
+    # Plot 5: Track & Plot PG (PPO) Entropy
+    # ---------------------------------------------------------
+    print("Extracting actual Entropy logs for PG entropy curve...")
+    ppo_log_dir = "./logs/ppo_logger"
+    os.makedirs(ppo_log_dir, exist_ok=True)
+    ppo_logger = configure(ppo_log_dir, ["csv"])
+    
+    # Using your best PPO hyperparameters
+    ppo_model = PPO("MlpPolicy", env, ent_coef=0.01, verbose=0)
+    ppo_model.set_logger(ppo_logger)
+    ppo_model.learn(total_timesteps=10000)
+    
+    ppo_csv = pd.read_csv(f"{ppo_log_dir}/progress.csv")
+    plt.figure(figsize=(8, 5))
+    if 'train/entropy_loss' in ppo_csv.columns:
+        valid_data = ppo_csv[['time/total_timesteps', 'train/entropy_loss']].dropna()
+        plt.plot(valid_data['time/total_timesteps'], valid_data['train/entropy_loss'], color='green', linewidth=2)
+        plt.title('Policy Gradient (PPO) Entropy Curve')
+        plt.xlabel('Timesteps')
+        plt.ylabel('Entropy Loss')
+        plt.grid(True)
+        plt.savefig('assets/pg_entropy_curve.png')
+        plt.close()
+        print("Saved: assets/pg_entropy_curve.png")
 
 if __name__ == "__main__":
     generate_all_artifacts()
