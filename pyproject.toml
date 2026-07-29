@@ -1,0 +1,15 @@
+[project]
+name = "olayinka_david_ajao_rl_summative"
+version = "0.1.0"
+description = "Reinforcement Learning Scout Recommendation Engine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "gymnasium>=0.29.1",
+    "stable-baselines3[extra]>=2.3.2",
+    "torch>=2.3.0",
+    "pygame>=2.5.2",
+    "matplotlib>=3.9.0",
+    "numpy>=1.26.4",
+    "pandas>=2.2.2"
+]
